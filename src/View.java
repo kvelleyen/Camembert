@@ -195,15 +195,12 @@ public class View extends JComponent implements MouseListener{
 				//etiquette
 				FontMetrics metricsChamp = g2.getFontMetrics();
 				int advChamp = metricsChamp.stringWidth(myModel.getChamps()[i]);
-				//System.err.println("advChamp --> " + advChamp);
-
-				//if(advChamp >= 77){}
+				
 
 				g2.drawString(myModel.getChamps()[i], (XLine + 70) - advChamp/2
 						, YLine - 40);
 				g2.setColor(Color.white);
-				g2.drawString(myModel.getChamps()[i], (XLine + 70) - advChamp/2
-						, YLine - 40);
+				
 
 			}
 			else if(arcCenter >= 90 && arcCenter < 180){
@@ -281,10 +278,15 @@ public class View extends JComponent implements MouseListener{
 		g2.drawOval(350, 150, 300, 300);
 
 		//centrer le titre
-		FontMetrics metricsTitre = g2.getFontMetrics();
-		int advTitre = metricsTitre.stringWidth(myModel.getTitre());
+		FontMetrics metrics = g2.getFontMetrics();
+		int advTitre = metrics.stringWidth(myModel.getTitre());
+		int advTotal = metrics.stringWidth(String.valueOf(count));
+		
 		g2.setColor(Color.white);
 		g2.drawString(myModel.getTitre(), 500-(advTitre/2), 300);
+		
+		g2.drawString(String.valueOf(count),
+				500-(advTotal/2), 320);
 
 
 		for(Integer i : description.keySet()){
