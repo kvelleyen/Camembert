@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Arc;
 
 import javax.swing.JComponent;
 
@@ -39,17 +40,22 @@ public class View extends JComponent implements MouseListener{
 	Double indice;
 
 	//propriétés du camembert
-	int CentreX;
-	int CentreY;
+	int centreX;
+	int centreY;
 	int rayon;
 
 	//Tableau de Titre
-	Rectangle[] TableauChamps;
+	Rectangle[] tableauChamps;
 
 	//Arraylist description
 	HashMap<Integer, Rectangle> description;
-	//ArrayList<Rectangle> description;
-
+	
+	HashMap<Integer, Arc2D> portion;
+	
+	//Tableau Arc2D
+	Arc2D[] tableauArc2D;
+	
+	
 	public View(Model myModel) {
 		this.myModel = myModel;
 
@@ -60,15 +66,20 @@ public class View extends JComponent implements MouseListener{
 		count = 0.0;
 		couleurs = new Color[myModel.getDonnees().length];
 		newDonnees = new Double[myModel.getDonnees().length];
-		CentreX = 500;
-		CentreY = 300;
+		centreX = 500;
+		centreY = 300;
 		rayon = 200;
 
-		TableauChamps = new Rectangle[myModel.getDonnees().length];
+		tableauChamps = new Rectangle[myModel.getDonnees().length];
 
 		//description = new ArrayList<Rectangle>();
 		description = new HashMap<Integer,Rectangle>();
 
+		tableauArc2D = new Arc2D[myModel.getDonnees().length];
+		
+		portion = new HashMap<Integer,Arc2D>();
+		
+		
 		for (int i = 0; i < myModel.getDonnees().length; i++){
 			count = count + myModel.getDonnees()[i];
 		}
@@ -88,22 +99,22 @@ public class View extends JComponent implements MouseListener{
 
 	//Getters and setters
 	public int getCentreX() {
-		return CentreX;
+		return centreX;
 	}
 	public void setCentreX(int centreX) {
-		CentreX = centreX;
+		this.centreX = centreX;
 	}
 	public int getCentreY() {
-		return CentreY;
+		return centreY;
 	}
 	public void setCentreY(int centreY) {
-		CentreY = centreY;
+		this.centreY = centreY;
 	}
 	public Rectangle[] getTableauChamps() {
-		return TableauChamps;
+		return tableauChamps;
 	}
 	public void setTableauChamps(Rectangle[] tableauChamps) {
-		TableauChamps = tableauChamps;
+		this.tableauChamps = tableauChamps;
 	}
 	public HashMap<Integer, Rectangle> getDescription() {
 		return description;
@@ -111,6 +122,24 @@ public class View extends JComponent implements MouseListener{
 	public void setDescription(HashMap<Integer, Rectangle> description) {
 		this.description = description;
 	}
+	
+	public Arc2D[] getTableauArc2D() {
+		return tableauArc2D;
+	}
+
+	public void setTableauArc2D(Arc2D[] tableauArc2D) {
+		this.tableauArc2D = tableauArc2D;
+	}
+
+	public HashMap<Integer, Arc2D> getPortion() {
+		return portion;
+	}
+
+	public void setPortion(HashMap<Integer, Arc2D> portion) {
+		this.portion = portion;
+	}
+
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
@@ -167,10 +196,20 @@ public class View extends JComponent implements MouseListener{
 
 		for (int i = 0; i < myModel.getDonnees().length; i++){
 
+						
 			//portion du camembert
 			g2.setColor(couleurs[i]);
-			Arc2D monArc = new Arc2D.Double(300, 100, 400, 400, indice, newDonnees[i], Arc2D.PIE);
-			g2.fill(monArc);
+			
+			
+			
+			//if (tableauArc2D[tableauArc2D.length-1]==null) {
+				Arc2D monArc = new Arc2D.Double(300, 100, 400, 400, indice, newDonnees[i], Arc2D.PIE);
+				tableauArc2D[i] = monArc;
+				g2.fill(monArc);
+				//System.out.println("View.paintComponent()");
+			//}else{
+				g2.fill(tableauArc2D[i]);
+			//}
 
 			//etiquette au centre de l'arc
 			Double arcCenter = (newDonnees[i]/2) + indice;
@@ -179,15 +218,15 @@ public class View extends JComponent implements MouseListener{
 			System.out.println("nouvelles données " + newDonnees[i]);
 			 */
 
-			int XLine = CentreX + (int)(rayon * Math.cos(Math.toRadians(arcCenter)));
-			int YLine = CentreY - (int)(rayon * Math.sin(Math.toRadians(arcCenter)));
+			int XLine = centreX + (int)(rayon * Math.cos(Math.toRadians(arcCenter)));
+			int YLine = centreY - (int)(rayon * Math.sin(Math.toRadians(arcCenter)));
 
 			if(arcCenter >= 0 && arcCenter < 90){
 				g2.drawLine(XLine,YLine,XLine + 20,YLine - 20);
 
 				Rectangle rect = new Rectangle(XLine + 20, YLine - 60,
 						100, 40);
-				TableauChamps[i]=rect;
+				tableauChamps[i]=rect;
 
 				g2.fillRect(rect.x, rect.y, rect.width, rect.height);
 				g2.setColor(Color.white);
@@ -209,7 +248,7 @@ public class View extends JComponent implements MouseListener{
 				Rectangle rect = new Rectangle(XLine - 120, YLine - 60,
 						100, 40);
 
-				TableauChamps[i]=rect;
+				tableauChamps[i]=rect;
 
 				g2.fillRect((int) rect.getX(),(int) rect.getY(),rect.width, rect.height);
 
@@ -228,7 +267,7 @@ public class View extends JComponent implements MouseListener{
 				Rectangle rect = new Rectangle(XLine - 120, YLine + 20,
 						100, 40);
 
-				TableauChamps[i]=rect;
+				tableauChamps[i]=rect;
 
 				g2.fillRect((int) rect.getX(),(int) rect.getY(),rect.width, rect.height);
 
@@ -247,7 +286,7 @@ public class View extends JComponent implements MouseListener{
 				Rectangle rect = new Rectangle(XLine + 20, YLine + 20,
 						100, 40);
 
-				TableauChamps[i]=rect;
+				tableauChamps[i]=rect;
 
 				g2.fillRect((int) rect.getX(),(int) rect.getY(),rect.width, rect.height);
 				g2.setColor(Color.white);
@@ -268,6 +307,13 @@ public class View extends JComponent implements MouseListener{
 
 			indice = indice + newDonnees[i];
 		}
+		
+		for(Integer i : portion.keySet()){
+			
+			g2.setColor(couleurs[i]);
+			g2.fill(portion.get(i));			
+		}
+		
 
 		//interieur du camembert
 		g2.setColor(Color.gray);
@@ -290,7 +336,7 @@ public class View extends JComponent implements MouseListener{
 
 
 		for(Integer i : description.keySet()){
-			if(description.get(i).getX() >= CentreX && description.get(i).getY() < CentreY){
+			if(description.get(i).getX() >= centreX && description.get(i).getY() < centreY){
 				g2.setColor(Color.lightGray);
 				//rectangle descriptif
 				g2.fillRect((int)description.get(i).getX(),(int) description.get(i).getY(), description.get(i).width, description.get(i).height);
@@ -322,7 +368,7 @@ public class View extends JComponent implements MouseListener{
 				//g2.drawString(myModel.getDescription()[i].substring(0,20), (int)description.get(i).getX() + 10,(int) description.get(i).getY() + 15);
 			}
 
-			else if (description.get(i).getX() < CentreX && description.get(i).getY() < CentreY) {
+			else if (description.get(i).getX() < centreX && description.get(i).getY() < centreY) {
 				g2.setColor(Color.lightGray);
 				//rectangle descriptif
 				g2.fillRect((int)description.get(i).getX(),(int) description.get(i).getY(), description.get(i).width, description.get(i).height);					
@@ -330,7 +376,7 @@ public class View extends JComponent implements MouseListener{
 				g2.setColor(Color.black);
 				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX(),(int) description.get(i).getY());
 			}
-			else if (description.get(i).getX() < CentreX && description.get(i).getY() >= CentreY) {
+			else if (description.get(i).getX() < centreX && description.get(i).getY() >= centreY) {
 				g2.setColor(Color.lightGray);
 				//rectangle descriptif
 				g2.fillRect((int)description.get(i).getX(),(int) description.get(i).getY(), description.get(i).width, description.get(i).height);					
@@ -338,7 +384,7 @@ public class View extends JComponent implements MouseListener{
 				g2.setColor(Color.black);
 				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX(),(int) description.get(i).getY());
 			}
-			else if (description.get(i).getX() > CentreX && description.get(i).getY() >= CentreY) {
+			else if (description.get(i).getX() > centreX && description.get(i).getY() >= centreY) {
 				g2.setColor(Color.lightGray);
 				//rectangle descriptif
 				g2.fillRect((int)description.get(i).getX(),(int) description.get(i).getY(), description.get(i).width, description.get(i).height);					
@@ -347,6 +393,8 @@ public class View extends JComponent implements MouseListener{
 				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX(),(int) description.get(i).getY());
 			}
 
+			
+			
 		}
 
 	}
