@@ -59,6 +59,8 @@ public class View extends JComponent implements MouseListener{
 	//Tableau de triangle
 	ArrayList<Polygon> fleches;
 	
+	
+	
 	public View(Model myModel) {
 		this.myModel = myModel;
 
