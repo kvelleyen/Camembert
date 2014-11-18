@@ -3,6 +3,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -55,12 +56,13 @@ public class View extends JComponent implements MouseListener{
 	//Tableau Arc2D
 	Arc2D[] tableauArc2D;
 	
+	//Tableau de triangle
+	ArrayList<Polygon> fleches;
 	
 	public View(Model myModel) {
 		this.myModel = myModel;
 
 		this.addMouseListener(this);
-
 
 		controller = new Controller();
 		count = 0.0;
@@ -79,6 +81,7 @@ public class View extends JComponent implements MouseListener{
 		
 		portion = new HashMap<Integer,Arc2D>();
 		
+		fleches = new ArrayList<Polygon>();
 		
 		for (int i = 0; i < myModel.getDonnees().length; i++){
 			count = count + myModel.getDonnees()[i];
@@ -139,6 +142,13 @@ public class View extends JComponent implements MouseListener{
 		this.portion = portion;
 	}
 
+	public ArrayList<Polygon> getFleches() {
+		return fleches;
+	}
+
+	public void setFleches(ArrayList<Polygon> fleches) {
+		this.fleches = fleches;
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -343,29 +353,9 @@ public class View extends JComponent implements MouseListener{
 
 				//description
 
-				System.err.println(myModel.getDescription()[i].length());
-
 				g2.setColor(Color.black);
 				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX() + 10,(int) description.get(i).getY() + 15);
-
-
-
-				int index = 15;
-				int limite = 20;
-
-				for (int j = 0; j < myModel.getDescription()[i].length(); j=j+15) {
-					System.out.println(myModel.getDescription()[i].substring(j,myModel.getDescription()[i].length()));
-				}
-
-
-
-				/*g2.drawString(s,(int) description.get(i).getX() + 10,(int) description.get(i).getY() + index2);
-						index2 = index2 + 15;*/
-
-
-
-
-				//g2.drawString(myModel.getDescription()[i].substring(0,20), (int)description.get(i).getX() + 10,(int) description.get(i).getY() + 15);
+				g2.drawString(String.valueOf(myModel.getDonnees()[i]), (int)description.get(i).getX() + 10,(int) description.get(i).getY() + 35);
 			}
 
 			else if (description.get(i).getX() < centreX && description.get(i).getY() < centreY) {
@@ -374,7 +364,8 @@ public class View extends JComponent implements MouseListener{
 				g2.fillRect((int)description.get(i).getX(),(int) description.get(i).getY(), description.get(i).width, description.get(i).height);					
 				//description
 				g2.setColor(Color.black);
-				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX(),(int) description.get(i).getY());
+				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX()+10,(int) description.get(i).getY()+15);
+				g2.drawString(String.valueOf(myModel.getDonnees()[i]), (int)description.get(i).getX() + 10,(int) description.get(i).getY() + 35);
 			}
 			else if (description.get(i).getX() < centreX && description.get(i).getY() >= centreY) {
 				g2.setColor(Color.lightGray);
@@ -382,7 +373,8 @@ public class View extends JComponent implements MouseListener{
 				g2.fillRect((int)description.get(i).getX(),(int) description.get(i).getY(), description.get(i).width, description.get(i).height);					
 				//description
 				g2.setColor(Color.black);
-				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX(),(int) description.get(i).getY());
+				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX()+10,(int) description.get(i).getY()+15);
+				g2.drawString(String.valueOf(myModel.getDonnees()[i]), (int)description.get(i).getX() + 10,(int) description.get(i).getY() + 35);
 			}
 			else if (description.get(i).getX() > centreX && description.get(i).getY() >= centreY) {
 				g2.setColor(Color.lightGray);
@@ -390,10 +382,14 @@ public class View extends JComponent implements MouseListener{
 				g2.fillRect((int)description.get(i).getX(),(int) description.get(i).getY(), description.get(i).width, description.get(i).height);					
 				//description
 				g2.setColor(Color.black);
-				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX(),(int) description.get(i).getY());
+				g2.drawString(myModel.getDescription()[i], (int)description.get(i).getX()+10,(int) description.get(i).getY()+15);
+				g2.drawString(String.valueOf(myModel.getDonnees()[i]), (int)description.get(i).getX() + 10,(int) description.get(i).getY() + 35);
 			}
 
-			
+			for(Polygon p : fleches){
+				g2.setColor(Color.black);
+				g2.fill(p);
+			}
 			
 		}
 

@@ -1,3 +1,4 @@
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.Arc2D;
 
@@ -38,10 +39,31 @@ public class Controller extends JFrame{
 		Y = y;
 	}
 
-	public void onClickDescription(){		
+	public void onClickDescription(){
+		
+		for(Polygon p : vue.getFleches()){
+			if(){}
+		}
+		
 		for (int i = 0; i < vue.getTableauChamps().length; i++) {
 			//Si on clique sur un rectangle ou sur un arc2D
 			if(vue.getTableauChamps()[i].contains(X,Y) || vue.getTableauArc2D()[i].contains(X,Y)){
+				
+			Polygon triangle1 = new Polygon();
+			Polygon triangle2 = new Polygon();
+			
+			triangle1.addPoint(950, 10);
+			triangle1.addPoint(930, 40);			
+			triangle1.addPoint(970, 40);
+			
+
+			triangle2.addPoint(950, 80);
+			triangle2.addPoint(930, 50);			
+			triangle2.addPoint(970, 50);
+			
+			vue.getFleches().add(triangle1);
+			vue.getFleches().add(triangle2);
+				
 				//premier quartier
 				if(vue.getTableauChamps()[i].getX() >= vue.getCentreX() && vue.getTableauChamps()[i].getY() < vue.getCentreY()){
 				
@@ -62,45 +84,79 @@ public class Controller extends JFrame{
 					}else{
 						vue.getDescription().clear();
 						vue.getPortion().clear();
+						vue.getFleches().clear();
+						
 					}
 
 				}
 				//deuxieme quartier
-				else if (X < vue.getCentreX() && Y <= vue.getCentreY()){
+				else if (vue.getTableauChamps()[i].getX() < vue.getCentreX() && vue.getTableauChamps()[i].getY() <= vue.getCentreY()){
 					if(vue.getDescription().isEmpty()){
 						Rectangle rectangle = new Rectangle((int)vue.getTableauChamps()[i].getX()-175,
 								(int)vue.getTableauChamps()[i].getY(),
 								vue.getTableauChamps()[i].width+75,
 								vue.getTableauChamps()[i].height+40);
 						vue.getDescription().put(i, rectangle);
+						Arc2D arc = new Arc2D.Double(vue.getTableauArc2D()[i].getX()-10,
+								vue.getTableauArc2D()[i].getY()-10,
+								vue.getTableauArc2D()[i].getWidth()+20,
+								vue.getTableauArc2D()[i].getHeight()+20,
+								vue.getTableauArc2D()[i].getAngleStart(),
+								vue.getTableauArc2D()[i].getAngleExtent()+2, Arc2D.PIE);
+
+						vue.getPortion().put(i, arc);
 					}
 					else{
 						vue.getDescription().clear();
+						vue.getPortion().clear();
+						vue.getFleches().clear();
 					}
 				}
 				//troisieme quartier
-				else if (X < vue.getCentreX() && Y >= vue.getCentreY()){
+				else if (vue.getTableauChamps()[i].getX() < vue.getCentreX() && vue.getTableauChamps()[i].getY() >= vue.getCentreY()){
 					if(vue.getDescription().isEmpty()){
 						Rectangle rectangle = new Rectangle((int)vue.getTableauChamps()[i].getX()-175,
 								(int)vue.getTableauChamps()[i].getY()-40,
 								vue.getTableauChamps()[i].width+75,
 								vue.getTableauChamps()[i].height+40);
 						vue.getDescription().put(i, rectangle);
+						Arc2D arc = new Arc2D.Double(vue.getTableauArc2D()[i].getX()-10,
+								vue.getTableauArc2D()[i].getY()-10,
+								vue.getTableauArc2D()[i].getWidth()+20,
+								vue.getTableauArc2D()[i].getHeight()+20,
+								vue.getTableauArc2D()[i].getAngleStart(),
+								vue.getTableauArc2D()[i].getAngleExtent()+2, Arc2D.PIE);
+
+						vue.getPortion().put(i, arc);
 					}
 					else{
-						vue.getDescription().clear();						}
+						vue.getDescription().clear();
+						vue.getPortion().clear();
+						vue.getFleches().clear();
+						}
 				}
 				//quatrieme quartier
-				else if (X > vue.getCentreX() && Y >= vue.getCentreY()){
+				else if (vue.getTableauChamps()[i].getX() > vue.getCentreX() && vue.getTableauChamps()[i].getY() >= vue.getCentreY()){
 					if(vue.getDescription().isEmpty()){
 						Rectangle rectangle = new Rectangle((int)vue.getTableauChamps()[i].getX()+100,
 								(int)vue.getTableauChamps()[i].getY()-40,
 								vue.getTableauChamps()[i].width+75,
 								vue.getTableauChamps()[i].height+40);
 						vue.getDescription().put(i, rectangle);
+						Arc2D arc = new Arc2D.Double(vue.getTableauArc2D()[i].getX()-10,
+								vue.getTableauArc2D()[i].getY()-10,
+								vue.getTableauArc2D()[i].getWidth()+20,
+								vue.getTableauArc2D()[i].getHeight()+20,
+								vue.getTableauArc2D()[i].getAngleStart(),
+								vue.getTableauArc2D()[i].getAngleExtent()+2, Arc2D.PIE);
+
+						vue.getPortion().put(i, arc);
 					}
 					else{
-						vue.getDescription().clear();						}
+						vue.getDescription().clear();
+						vue.getPortion().clear();
+						vue.getFleches().clear();
+					}
 				}
 			}
 
